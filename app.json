@@ -2,7 +2,7 @@
   "expo": {
     "name": "mapactionapp",
     "slug": "mapactionapp",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "mapactionapp",
@@ -79,7 +79,16 @@
       "expo-web-browser",
       "@react-native-firebase/app",
       "expo-notifications",
-      "@react-native-firebase/messaging"
+      "@react-native-firebase/messaging",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
