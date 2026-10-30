@@ -5,7 +5,7 @@ import { getZoneFromOSM } from '../services/general';
 // Géolocalisation + géocodage inverse pour les écrans de signalement
 // d'incident (citoyen et agent). La précision GPS diffère selon
 // l'appelant (accuracy/timeInterval), donc paramétrée plutôt que figée.
-export function useIncidentLocation({ accuracy = Location.Accuracy.Balanced, timeInterval, defaultZoneName = 'Bamako' } = {}) {
+export function useIncidentLocation({ accuracy = Location.Accuracy.High, timeInterval, defaultZoneName = 'Bamako' } = {}) {
   const [location, setLocation] = useState(null);
   const [loadingLocation, setLoadingLocation] = useState(true);
   const [locationError, setLocationError] = useState(false);
@@ -63,7 +63,7 @@ export function useIncidentLocation({ accuracy = Location.Accuracy.Balanced, tim
           currentLocation.coords.latitude,
           currentLocation.coords.longitude
         );
-        if (zoneRecuperee) {
+        if (zoneRecuperee && zoneRecuperee !== 'Zone inconnue') {
           setZoneName(zoneRecuperee);
           zoneTrouvee = true;
         }

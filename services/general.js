@@ -77,17 +77,23 @@ export const getZoneFromOSM = async (latitude, longitude) => {
     
     if (data && data.address) {
       console.log("-> [DIAGNOSTIC OSM] Adresse complète trouvée :", data.display_name);
-      
-      // Choix de la zone par ordre de précision pour Bamako :
-      // 1. Le quartier (suburb -> ex: "Faladie Sema")
-      // 2. La commune ou quartier résidentiel (neighbourhood ou town -> ex: "Kalaban Coura")
-      // 3. La ville (city -> ex: "Bamako")
-      const zone = data.address.suburb || 
-                   data.address.neighbourhood || 
-                   data.address.town || 
-                   data.address.city;
 
-      return zone || "Zone inconnue";
+      // Champs fins (quartier/village) : ambigus seuls (ex. un village peut exister
+      // dans plusieurs régions), donc combinés avec city/state ci-dessous.
+      const FINE_FIELDS = ['suburb', 'neighbourhood', 'village', 'town', 'city_district', 'municipality'];
+      // Champs larges : suffisamment explicites seuls, utilisés en repli ou en contexte.
+      const BROAD_FIELDS = ['city', 'county', 'state_district', 'state'];
+
+      const preciseZone = FINE_FIELDS.map(field => data.address[field]).find(Boolean);
+
+      if (preciseZone) {
+        const context = data.address.city || data.address.state;
+        return context && context !== preciseZone ? `${preciseZone}, ${context}` : preciseZone;
+      }
+
+      const broadZone = BROAD_FIELDS.map(field => data.address[field]).find(Boolean);
+
+      return broadZone || "Zone inconnue";
     }
 
     console.warn("-> [WARN] Aucun composant d'adresse trouvé pour ces coordonnées.");

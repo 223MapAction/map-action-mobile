@@ -30,7 +30,7 @@ export default function SignalerIncidentScreen() {
   const [user, setUser] = useState(null);
 
   const { location, loadingLocation, locationError, zoneName, obtenirPosition } =
-    useIncidentLocation({ accuracy: Location.Accuracy.Balanced });
+    useIncidentLocation({ accuracy: Location.Accuracy.High });
 
   const { recording, audioUri, audioLevels, startRecording, stopRecording, deleteAudio } =
     useAudioRecorder({
